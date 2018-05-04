@@ -12,7 +12,9 @@ from django.core.exceptions import (
 )
 from django.core.files import uploadhandler
 from django.http.multipartparser import MultiPartParser, MultiPartParserError
-from django.utils.datastructures import ImmutableList, MultiValueDict
+from django.utils.datastructures import (
+    EnvironHeaders, ImmutableList, MultiValueDict,
+)
 from django.utils.deprecation import RemovedInDjango30Warning
 from django.utils.encoding import escape_uri_path, iri_to_uri
 from django.utils.functional import cached_property
@@ -57,7 +59,6 @@ class HttpRequest:
         self.path_info = ''
         self.method = None
         self.resolver_match = None
-        self._post_parse_error = False
         self.content_type = None
         self.content_params = None
 
@@ -65,6 +66,10 @@ class HttpRequest:
         if self.method is None or not self.get_full_path():
             return '<%s>' % self.__class__.__name__
         return '<%s: %s %r>' % (self.__class__.__name__, self.method, self.get_full_path())
+
+    @cached_property
+    def headers(self):
+        return EnvironHeaders(self.META)
 
     def _get_raw_host(self):
         """
@@ -289,7 +294,6 @@ class HttpRequest:
     def _mark_post_parse_error(self):
         self._post = QueryDict()
         self._files = MultiValueDict()
-        self._post_parse_error = True
 
     def _load_post_and_files(self):
         """Populate self._post and self._files if the content-type is a form type"""
@@ -313,9 +317,6 @@ class HttpRequest:
                 # formatting the error the request handler might access
                 # self.POST, set self._post and self._file to prevent
                 # attempts to parse POST data again.
-                # Mark that an error occurred. This allows self.__repr__ to
-                # be explicit about it instead of simply representing an
-                # empty POST
                 self._mark_post_parse_error()
                 raise
         elif self.content_type == 'application/x-www-form-urlencoded':
