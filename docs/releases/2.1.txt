@@ -211,6 +211,17 @@ Requests and Responses
   sets the ``Content-Disposition`` header to make the browser ask if the user
   wants to download the file. ``FileResponse`` also tries to set the
   ``Content-Type`` and ``Content-Length`` headers where appropriate.
+* Added :attr:`.HttpRequest.headers`.
+
+Serialization
+~~~~~~~~~~~~~
+
+* ...
+
+Signals
+~~~~~~~
+
+* ...
 
 Templates
 ~~~~~~~~~
