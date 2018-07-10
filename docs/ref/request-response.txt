@@ -136,8 +136,7 @@ All attributes should be considered read-only, unless stated otherwise.
 .. attribute:: HttpRequest.META
 
     A dictionary containing the `WSGI environ \
-    <https://www.python.org/dev/peps/pep-0333/#environ-variables>`_,
-    including all available HTTP headers.
+    <https://www.python.org/dev/peps/pep-0333/#environ-variables>`_, including all available HTTP headers.
     Available request headers are prefixed with the string ``HTTP_`` and
     depend on the client and server, but here are some examples:
 
@@ -163,8 +162,7 @@ All attributes should be considered read-only, unless stated otherwise.
     underscores and adding an ``HTTP_`` prefix to the name. So, for example, a
     header called ``X-Bender`` would be mapped to the ``META`` key
     ``HTTP_X_BENDER``.
-    See :attr:`~HttpRequest.headers` for more convenient header access
-    (``request.headers['User-Agent']``).
+    See :attr:`~HttpRequest.headers` for more convenient header access (``request.headers['User-Agent']``).
 
     Note that :djadmin:`runserver` strips all headers with underscores in the
     name, so you won't see them in ``META``. This prevents header-spoofing
